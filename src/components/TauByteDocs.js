@@ -12,6 +12,7 @@ import Drawer from '@mui/material/Drawer';
 import { useState } from 'react';
 import BlindIcon from '@mui/icons-material/Blind';
 import { useNavigate } from 'react-router-dom'
+import { CodeBlock, dracula} from "react-code-blocks";
 
 const TauByteDocs = () => {
     const [drawerOpen,setDrawerOpen] = useState(false)
@@ -118,6 +119,163 @@ const TauByteDocs = () => {
                                 When we push all the changes we made to github, two new repositories will be created in your GitHub account. One where you will store the code for your dFunctions, and another where you will store your configuration yaml files which control how TauByte deploys the code.
                             </p>
                             <p>
+                                Let's begin by writing the the dFunction that will allow us to send in raw JSON data with user information, and adds the user information to the database we created in the previous steps.
+                                To do this we first need to clone the code repository that was generated in our github account when we generated the dFunction. Simply navigate to your github and find the repository prefixed with "tb_code". 
+                                Clone that repo to your local machine using git. Navigate into that directory begin by creating a "functions" directory:
+                                <CodeBlock
+                                    text={"mkdir functions && cd functions\n"}
+                                    language={"bash"}
+                                    showLineNumbers={false}
+                                    startingLineNumber={0}
+                                    theme={dracula}
+                                    codeBlock 
+                                ></CodeBlock>
+                                Once inside the functions directory, you have to create the adduser.go file. Simply type in the following commands to generate the adduser.go file.
+                                <CodeBlock
+                                    text={"touch adduser.go"}
+                                    language={"bash"}
+                                    showLineNumbers={false}
+                                    startingLineNumber={0}
+                                    theme={dracula}
+                                    codeBlock>
+                                </CodeBlock>
+                                Now it's time to write some Go code for our adduser.go file. We will do so using VSCode. But before we do so, we will install a useful VSCode plugin that helps
+                                with code completion for Go in VSCode. This plugin was pointed out by @Sam from TauByte (<a href="https://discord.com/channels/973677117722202152/1050090176585678898/1050136885898526812" target="_blank">On Discord Channel</a>).
+                                So to get this plugin installed type in the following command to get VSCode spun up inside our functions directory
+                                <CodeBlock
+                                    text={"code ."}
+                                    language={"bash"}
+                                    showLineNumbers={false}
+                                    startingLineNumber={0}
+                                    theme={dracula}
+                                    codeBlock>
+                                </CodeBlock>
+                                Once VSCode opens, locate the extensions icon on the left bar and click it.
+                                <br/>
+                                <img alt="vscode extensions icon" height="500px" src="docs/vscodeexticon.png"/>
+                                <br/>
+                                Now type in "go" and install the following two extensions. "Go", and "Go Nightly"
+                                <img alt="vscode go language support extension" height="400px" src="docs/golangsuppext.png"/>
+                                <br/>
+                                <br/>
+                                Once you have those two extensions installed in your VSCode, you're ready to rock and roll with syntax
+                                completion and highlighting. We can now write the code. Open your adduser.go file in VSCode and paste in
+                                the following code.
+                                <CodeBlock
+                                    text={String.raw`
+package lib
+
+import (
+	"io/ioutil"
+
+	"bitbucket.org/taubyte/go-sdk/database"
+	"bitbucket.org/taubyte/go-sdk/event"
+)
+
+//go:generate go get github.com/mailru/easyjson
+//go:generate go install github.com/mailru/easyjson/...@latest
+//go:generate easyjson -all \${GOFILE}
+
+//easyjson:json
+type User struct {
+	UUID string
+	name string
+	lname string
+	age int32
+}
+
+//export adduser
+func adduser(e event.Event) uint32 {
+	//Get the http object from the event
+  	h, err := e.HTTP()
+		if err != nil {
+		return 1
+	}
+
+	// //Get a reference to the database
+	db, err := database.New("testdb")
+	if err != nil {
+		return 1
+	}
+
+	//Get the Body in the HTTP object
+	body := h.Body()
+	bodyData, err := ioutil.ReadAll(body)
+	if err != nil {
+		return 1
+	}
+
+	//Close the body
+	err = body.Close()
+	if err != nil {
+		return 1
+	}
+
+	//Create an empty user
+	incomingUser := &User{}
+
+	//Fill it with the unmarshalled json version of the body data
+	incomingUser.UnmarshalJSON(bodyData)
+
+	//Save the user JSON to the the database
+	db.Put(incomingUser.UUID,bodyData)
+	
+	//Close the db
+	err = db.Close()
+	if err != nil {
+		return 1
+	}
+	
+	//Return a response to the caller
+	h.Write([]byte("{ UUID : " + incomingUser.UUID + ", ADDED: true}"))
+
+  	return 0
+}
+                                    `}
+                                    highlight={true}
+                                    language={"go"}
+                                    showLineNumbers={true}
+                                    startingLineNumber={0}
+                                    theme={dracula}
+                                    codeBlock
+                                >
+                                    
+                                </CodeBlock>
+                                <br/>
+                                Now save the code and open up a terminal within VSCode
+                                <img alt="vscode open new terminal" height="200px" src="docs/vscodeterminal.png"/>
+                                And then go back to the root of the repository where we created the "functions" directory by typing the
+                                following command into the terminal you just opened:
+                                <CodeBlock
+                                    text={"cd ..\ntouch .gitignore\ncode .gitignore"}
+                                    language={"bash"}
+                                    showLineNumbers={false}
+                                    startingLineNumber={0}
+                                    theme={dracula}
+                                    codeBlock
+                                >
+                                </CodeBlock>
+                                This will send you back to the root directory of the repo, add a .gitignore file and open it in VSCode. Next we have to add two new items into the .gitignore file:
+                                <ol>
+                                    <li>
+                                        go.mod
+                                    </li>
+                                    <li>
+                                        go.sum
+                                    </li>
+                                </ol>
+                                After adding these two items into the .gitignore file, we can finally commit and push the dFunction code to the repository.
+                                This will cause taubyte to generate a build job for this function. So close the .gitignore file, and return to the terminal we opened
+                                in our other instance of VSCode. And drop the following commands.
+                                <CodeBlock
+                                    text={"go mod init function && go mod tidy\ngit add .\ngit commit -m \"pushing adduser dfunc\"\ngit push origin master"}
+                                    language={"bash"}
+                                    showLineNumbers={false}
+                                    startingLineNumber={0}
+                                    theme={dracula}
+                                    codeBlock>
+                                </CodeBlock>
+
                             </p>
                         </li>
                     </ol> 
