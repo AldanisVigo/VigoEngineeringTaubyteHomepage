@@ -146,9 +146,10 @@ const TauByteDocs = () => {
                                     theme={dracula}
                                     codeBlock>
                                 </CodeBlock>
-                                Now it's time to write some Go code for our adduser.go file. We will do so using VSCode. But before we do so, we will install a useful VSCode plugin that helps
+                                {/* Now it's time to write some Go code for our adduser.go file. We will do so using VSCode. But before we do so, we will install a useful VSCode plugin that helps
                                 with code completion for Go in VSCode. This plugin was pointed out by @Sam from TauByte (<a href="https://discord.com/channels/973677117722202152/1050090176585678898/1050136885898526812" target="_blank" rel="noopener noreferrer">On Discord Channel</a>).
-                                So to get this plugin installed type in the following command to get VSCode spun up inside our functions directory
+                                So to get this plugin installed type in the following command to get VSCode spun up inside our functions directory */}
+                                Though you don't need to get the following VSCode extension, it could help with code completion for go etc. If you'd like to install it on VSCode proceed, if not just skip this step. 
                                 <CodeBlock
                                     text={"code ."}
                                     language={"bash"}
@@ -161,11 +162,11 @@ const TauByteDocs = () => {
                                 <br/>
                                 <img alt="vscode extensions icon" height="500px" src="docs/vscodeexticon.png"/>
                                 <br/>
-                                Now type in "go" and install the following two extensions. "Go", and "Go Nightly"
+                                Now type in "go" and install the following two extension: "Go"
                                 <img alt="vscode go language support extension" height="400px" src="docs/golangsuppext.png"/>
                                 <br/>
                                 <br/>
-                                Once you have those two extensions installed in your VSCode, you're ready to rock and roll with syntax
+                                Once you have the go extension installed in your VSCode, you're ready to rock and roll with syntax
                                 completion and highlighting. We can now write the code. Open your adduser.go file in VSCode and paste in
                                 the following code.
                                 <CodeBlock
@@ -173,6 +174,7 @@ const TauByteDocs = () => {
 package lib
 
 import (
+	"fmt"
 	"io/ioutil"
 
 	"bitbucket.org/taubyte/go-sdk/database"
@@ -222,10 +224,17 @@ func adduser(e event.Event) uint32 {
 	incomingUser := &User{}
 
 	//Fill it with the unmarshalled json version of the body data
-	incomingUser.UnmarshalJSON(bodyData)
+	err = incomingUser.UnmarshalJSON(bodyData)
+	if err != nil {
+		return 1
+	}
 
 	//Save the user JSON to the the database
-	db.Put(incomingUser.UUID,bodyData)
+	//Ignoring errors from db.Put, h.Write, and UnmarshallJSON
+	err = db.Put(incomingUser.UUID,bodyData)
+	if err != nil {
+		return 1
+	}
 	
 	//Close the db
 	err = db.Close()
@@ -234,7 +243,13 @@ func adduser(e event.Event) uint32 {
 	}
 	
 	//Return a response to the caller
-	h.Write([]byte("{ UUID : " + incomingUser.UUID + ", ADDED: true}"))
+	w, err := h.Write([]byte("{ UUID : " + incomingUser.UUID + ", ADDED: true}"))
+	if err != nil{
+		return 1
+	}
+
+	//Print out result
+	fmt.Println(w)
 
   	return 0
 }
