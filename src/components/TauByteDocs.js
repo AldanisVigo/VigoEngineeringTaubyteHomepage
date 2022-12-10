@@ -59,7 +59,7 @@ const TauByteDocs = () => {
                     <div>
                         <h3>1. Setup a Website for The Front-End</h3>
                         <p>
-                            a. Login to tubyte and click on the "Websites" tab on the left panel.
+                            a. Login to TauByte and click on the "Websites" tab on the left panel.
                             <br/>
                             <img alt="website tab left panel" height="400px" src="docs/sidepanelwebsitelink.png"/>
                             <br/>
@@ -73,12 +73,12 @@ const TauByteDocs = () => {
                             <img alt="configure new site" height="800px" src="docs/configurenewsite.png"/>
                             <br/>
                             <br/>
-                            d. Now you can click the green merge button on the bottom right and this will generate a repo and push all your changes to github. The next thing we have to do is make some change on the file structure in order for taubyte to begin the build job on our site.
-                            We can do this by cloning into the repo, and making a simple change to the README.md file and then pushing the changes back up to GitHub. This will cause a diff to happen and that's taubytes signal to spin up a build job.
+                            d. Now you can click the green merge button on the bottom right and this will generate a repo and push all your changes to github. The next thing we have to do is make some change on the file structure in order for TauByte to begin the build job on our site.
+                            We can do this by cloning into the repo, and making a simple change to the README.md file and then pushing the changes back up to GitHub. This will cause a diff to happen and that's TauBytes signal to spin up a build job.
                             You can view the build jobs in the build queue towards the bottom of the left side menu.
                             <br/>
                             <br/>
-                            e. After completing this step, you will have three new repositories in your github account. Two of them will be used for adding code and configuring taubyte, and the other will be used for storing the code for the frontend of our website.
+                            e. After completing this step, you will have three new repositories in your github account. Two of them will be used for adding code and configuring TauByte, and the other will be used for storing the code for the frontend of our website.
                         </p>
                     </div>
                 </Col>
@@ -147,7 +147,7 @@ const TauByteDocs = () => {
                                     codeBlock>
                                 </CodeBlock>
                                 Now it's time to write some Go code for our adduser.go file. We will do so using VSCode. But before we do so, we will install a useful VSCode plugin that helps
-                                with code completion for Go in VSCode. This plugin was pointed out by @Sam from TauByte (<a href="https://discord.com/channels/973677117722202152/1050090176585678898/1050136885898526812" target="_blank">On Discord Channel</a>).
+                                with code completion for Go in VSCode. This plugin was pointed out by @Sam from TauByte (<a href="https://discord.com/channels/973677117722202152/1050090176585678898/1050136885898526812" target="_blank" rel="noopener noreferrer">On Discord Channel</a>).
                                 So to get this plugin installed type in the following command to get VSCode spun up inside our functions directory
                                 <CodeBlock
                                     text={"code ."}
@@ -262,6 +262,7 @@ func adduser(e event.Event) uint32 {
                                     codeBlock
                                 >
                                 </CodeBlock>
+                                <h6>Don't necesarily need to do this step read more <a href="https://discord.com/channels/973677117722202152/973677119357988866/1050931163746799667" target="_blank" rel="noopener noreferrer">here</a></h6>
                                 This will send you back to the root directory of the repo, add a .gitignore file and open it in VSCode. Next we have to add two new items into the .gitignore file:
                                 <ol>
                                     <li>
@@ -272,7 +273,7 @@ func adduser(e event.Event) uint32 {
                                     </li>
                                 </ol>
                                 After adding these two items into the .gitignore file, we can finally commit and push the dFunction code to the repository.
-                                This will cause taubyte to generate a build job for this function. So close the .gitignore file, and return to the terminal we opened
+                                This will cause TauByte to generate a build job for this function. So close the .gitignore file, and return to the terminal we opened
                                 in our other instance of VSCode. And drop the following commands.
                                 <CodeBlock
                                     text={"go mod init function && go mod tidy\ngit add .\ngit commit -m \"pushing adduser dfunc\"\ngit push origin master"}
