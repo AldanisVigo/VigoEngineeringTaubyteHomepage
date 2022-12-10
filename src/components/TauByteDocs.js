@@ -18,6 +18,11 @@ const TauByteDocs = () => {
     const [drawerOpen,setDrawerOpen] = useState(false)
     const nav = useNavigate()
 
+    const playEasySound = (e) => {
+        const easySound = new Audio('that_was_easy.mp3')
+        easySound.play()
+    }
+
     return <div>
         <Box sx={{ flexGrow: 1 }}>
             <Drawer open={drawerOpen} onClose={e=>setDrawerOpen(false)}>
@@ -38,7 +43,9 @@ const TauByteDocs = () => {
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     TauByte Experiments
                 </Typography>
-                <Button color="inherit">Easy Button</Button>
+                <Button color="inherit" onClick={playEasySound}>
+                    <img height="50px" alt="easy button" src="easy_button.png"/>
+                </Button>
             </Toolbar>
             </AppBar>
         </Box>
