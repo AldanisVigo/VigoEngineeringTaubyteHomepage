@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 import TauByteDocs from './components/TauByteDocs';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import FileUploadTest from './components/FileUploadTest';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App/>}/>
         <Route path="/taubytepsudodocs" element={<TauByteDocs/>}/>
+        <Route path="/imageuploadtest" element={<FileUploadTest/>}/>
       </Routes>
     </Router>
 );
