@@ -1,4 +1,3 @@
-import './App.css';
 import React from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -20,35 +19,33 @@ const App = () => {
       const easySound = new Audio('that_was_easy.mp3')
       easySound.play()
   }
-  return (
-    <div>
-      <Box sx={{ flexGrow: 1 }}>
-        <Drawer open={drawerOpen} onClose={e=>setDrawerOpen(false)}>
-          <Button onClick={e=>nav('/taubytepsudodocs')}><BlindIcon/>My TauByte Notes</Button>
-        </Drawer>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-              onClick={e=>setDrawerOpen(!drawerOpen)}
-            >
-              <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Vigo's Stash of Goodness
-              </Typography>
-              <Button color="inherit" onClick={playEasySound}>
-                <img height="50px" alt="easy button" src="easy_button.png"/>
-              </Button>
-          </Toolbar>
-        </AppBar>
-      </Box>
-    </div>
-  );
+  return <div>
+    <Box sx={{ flexGrow: 1 }}>
+      <Drawer open={drawerOpen} onClose={e=>setDrawerOpen(false)}>
+        <Button onClick={e=>nav('/taubytepsudodocs')}><BlindIcon/>My TauByte Notes</Button>
+      </Drawer>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+            onClick={e=>setDrawerOpen(!drawerOpen)}
+          >
+            <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Vigo's Stash of Goodness
+            </Typography>
+            <Button color="inherit" onClick={playEasySound}>
+              <img height="50px" alt="easy button" src="easy_button.png"/>
+            </Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
+  </div>
 }
 
-export default App;
+export default App

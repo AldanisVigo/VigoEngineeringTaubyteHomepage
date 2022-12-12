@@ -12,9 +12,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Router>
       <Routes>
-        <Route path="/" element={<App/>}/>
         <Route path="/taubytepsudodocs" element={<TauByteDocs/>}/>
         <Route path="/imageuploadtest" element={<FileUploadTest/>}/>
+        <Route path="/" element={<App/>}/>
       </Routes>
     </Router>
 );

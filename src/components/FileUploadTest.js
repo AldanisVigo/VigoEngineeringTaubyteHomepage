@@ -3,22 +3,24 @@ import { useRef, useEffect, useCallback, useState } from 'react'
 
 const FileUploadTest = () => {
     const fileElementRef = useRef()
-    const [files,setFiles] = useState([])
+    const [file,setFile] = useState()
+    const [uploadPreview,setUploadPreview] = useState()
 
     const updateFileList = useCallback(async () => {
         //Send request to function for the list of files
         try{
-            const request = await fetch('https://vigocoding.com/getallfiles',{
+            const request = await fetch('https://vigocoding.com/getfile',{
                 method : "POST",
                 headers : {
                     "Content-Type" : "application/json"
                 },
                 body : JSON.stringify({
                     UUID : "aldanisvigo",
-                    FILES : files
+                    name : "aldanisvigo"
                 })
             })
             const requestJson = await request.json()
+            setFile(requestJson.file)
             console.log(requestJson)
         }catch(err){
             console.error(err)
@@ -29,31 +31,20 @@ const FileUploadTest = () => {
         updateFileList() //Retrieve the list of already uploaded images
     },[updateFileList])
     
-
-    const generateUploadPreview = (e) => {
+    const generateUploadPreview = async (e) => {
         const files = fileElementRef.current.files
-        setFiles(files)
+        setUploadPreview(await toBase64(files[0]))
         //Output list of files selected in the file upload component
         console.log(files)
     }
 
-    const readFile = (file) => {
-        return new Promise((resolve, reject) => {
-            // Create file reader
-            let reader = new FileReader()
-
-            // Register event listeners
-            reader.addEventListener("loadend", e => resolve(e.target.result))
-            reader.addEventListener("error", reject)
-
-            // Read file
-            reader.readAsArrayBuffer(file)
-        })
-    }
-
-    const getAsByteArray = async (file) => {
-       return new Uint8Array(await readFile(file))
-    }
+    const toBase64 = (f) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(f);
+        //Remove the first part of the base64 string "data:image/png;base64,"
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+    });
 
     const uploadNewImage = async (e) => {
         //Log the list of files to upload
@@ -61,23 +52,28 @@ const FileUploadTest = () => {
 
         //Log the file
         console.log("Uploading the following files to TauByte storage")        
-        const byteArray = await getAsByteArray(file)
-        console.log(byteArray)
 
-        var bodyData = new FormData()
-        bodyData.append('file', byteArray)
-        // bodyData.append('UUID', 'aldanisvigo')
-        // bodyData.append('name', 'aldanisvigo')
+        //Convert the file to a base 64 string
+        const dataUrl = await toBase64(file)
+
+        //Generate a request body
+        const reqBody = JSON.stringify({
+            UUID : "aldanisvigo",
+            filePath : "aldanisvigo",
+            file : dataUrl
+        })
+
+        console.log(reqBody)
 
         try{
             //Create a fetch post request to send the files to the dFunc
             const response = await fetch('https://vigocoding.com/uploadfile',{
                 method : "POST",
-                //Headers seem to be causing a problem, allow headers to be added by the browser
+                // Headers seem to be causing a problem, allow headers to be added by the browser
                 headers : {
-                    "Content-Type" : "multipart/form-data"
+                    "Content-Type" : "application/json"
                 },
-                body : bodyData
+                body : reqBody
             })
 
             console.log("Response")
@@ -87,6 +83,8 @@ const FileUploadTest = () => {
             //Log the response to the console for now
             console.log("Response from TauByte:")
             console.log(json)
+
+            updateFileList()
 
         }catch(err){ //If we encounter an error
             //Log the error to the console for debugging
@@ -98,9 +96,17 @@ const FileUploadTest = () => {
     return <div>
         <h3>Upload a File to TauByte</h3>
         <div>
-            <h3>Please select an image file: </h3>
-            <input type="file" ref={fileElementRef} onChange={generateUploadPreview}/>
+            <h3>Please select an image file: (.png, .jpeg, .jpg only) </h3>
+            <input accept=".png,.jpeg,.jpg" type="file" ref={fileElementRef} onChange={generateUploadPreview}/>
             <button onClick={uploadNewImage}>Upload Image</button>
+            <br/>
+            {uploadPreview && <div>
+                <h4>Upload Preview</h4>
+                {uploadPreview && <img alt="upload preview" width="300" src={"data:image/png;base64," + uploadPreview}></img>}
+                <br/>
+            </div>}
+            <h4>Currently Uploaded Image</h4>
+            {file && <img alt="currently uploaded" width="300" src={"data:image/png;base64," + file}></img>}
         </div>
     </div>
 }
