@@ -1,29 +1,18 @@
 import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
-import './TauByteDocs.css'
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Drawer from '@mui/material/Drawer';
-import { useState } from 'react';
-import BlindIcon from '@mui/icons-material/Blind';
-import { useNavigate } from 'react-router-dom'
+import './CrudExample.css'
 import { CodeBlock, dracula} from "react-code-blocks";
 import Header from './Header'
-const TauByteDocs = () => {
+const CrudExample = () => {
     return <div>
         <Header/>
         <Container>
             <Row>
-                <Col className="d-flex justify-content-center mt-5"><h1>TauByte Experiments</h1></Col>
+                <Col className="d-flex justify-content-center mt-5"><h1>C-R-U-D Experiment</h1></Col>
             </Row>
             <Row>
                 <Col>
-                    <h2>Creating a simple site with backend CRUD.</h2>
+                    <h2>Setting up a website performs C-R-U-D on TauByte's database.</h2>
                     <div>
                         <h3>1. Setup a Website for The Front-End</h3>
                         <p>
@@ -266,7 +255,6 @@ func adduser(e event.Event) uint32 {
                                     theme={dracula}
                                     codeBlock>
                                 </CodeBlock>
-
                             </p>
                         </li>
                     </ol> 
@@ -276,4 +264,4 @@ func adduser(e event.Event) uint32 {
     </div>
 }
 
-export default TauByteDocs
+export default CrudExample

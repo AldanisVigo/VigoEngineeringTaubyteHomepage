@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
-import TauByteDocs from './components/TauByteDocs';
+import CrudExample from './components/CrudExample';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FileUploadTest from './components/FileUploadTest';
 
@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Router>
       <Routes>
-        <Route path="/taubytepsudodocs" element={<TauByteDocs/>}/>
+        <Route path="/taubytepsudodocs" element={<CrudExample/>}/>
         <Route path="/imageuploadtest" element={<FileUploadTest/>}/>
         <Route path="/" element={<App/>}/>
       </Routes>

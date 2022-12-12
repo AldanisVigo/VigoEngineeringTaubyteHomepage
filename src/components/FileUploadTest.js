@@ -2,6 +2,7 @@ import React from 'react'
 import { useRef, useEffect, useCallback, useState } from 'react'
 import { CircularProgress } from '@mui/material'
 import Header from './Header'
+import { Container, Row, Col } from 'react-bootstrap'
 
 const FileUploadTest = () => {
     const fileElementRef = useRef()
@@ -115,6 +116,8 @@ const FileUploadTest = () => {
             //Get the json from the response
             const json = await response.json()
 
+            console.log(json)
+
             //Get the currently uploaded file back from TauByte storage
             getCurrentFile()
             
@@ -139,24 +142,37 @@ const FileUploadTest = () => {
     */
     return <div>
         <Header/>
-        <h3>Upload a File to TauByte</h3>
-        {!uploading && <div>
-            <h3>Please select an image file: (.png, .jpeg, .jpg only) </h3>
-            <input accept=".png,.jpeg,.jpg" type="file" ref={fileElementRef} onChange={generateUploadPreview}/>
-            <button onClick={uploadNewImage}>Upload Image</button>
-            <br/>
-            {uploadPreview && <div>
-                <h4>Upload Preview</h4>
-                {uploadPreview && <img alt="upload preview" width="300" src={"data:image/png;base64," + uploadPreview}></img>}
-                <br/>
-            </div>}
-            <h4>Currently Uploaded Image</h4>
-            {file && <img alt="currently uploaded" width="300" src={"data:image/png;base64," + file}></img>}
-        </div>}
-        {uploading && <div>
-            Uploading Image to TauByte Storage, Please wait ....<br/>
-            <CircularProgress/>
-        </div>}
+        <Container>
+            <Row>  
+                <Col>
+                    <h3>Upload a File to TauByte</h3>
+                    {!uploading && <div>
+                        <h3>Please select an image file: (.png, .jpeg, .jpg only) </h3>
+                        <input accept=".png,.jpeg,.jpg" type="file" ref={fileElementRef} onChange={generateUploadPreview}/>
+                        <button onClick={uploadNewImage}>Upload Image</button>
+                        <br/>
+                        {uploadPreview && <div>
+                            <h4>Upload Preview</h4>
+                            {uploadPreview && <img alt="upload preview" width="300" src={"data:image/png;base64," + uploadPreview}></img>}
+                            <br/>
+                        </div>}
+                        <h4>Currently Uploaded Image</h4>
+                        {file && <img alt="currently uploaded" width="300" src={"data:image/png;base64," + file}></img>}
+                    </div>}
+                    {uploading && <div>
+                        Uploading Image to TauByte Storage, Please wait ....<br/>
+                        <CircularProgress/>
+                    </div>}
+
+                    <br/>
+                    Code For This View on GitHub: <a href="https://github.com/AldanisVigo/VigoEngineeringTaubyteHomepage/blob/4c47b0a786805514f6c7b06fce2cdf81ed22dd7b/src/components/FileUploadTest.js">View Code</a>
+                    <br/>
+                    Code For The Upload File dFunction: <a href="https://github.com/AldanisVigo/tb_code_VigoEngineering/blob/fd020db29fbe9bc25e664fe4f098465917748d19/functions/uploadfile.go">View Code</a>
+                    <br/>
+                    Code For The Get File dFunction: <a href="https://github.com/AldanisVigo/tb_code_VigoEngineering/blob/fd020db29fbe9bc25e664fe4f098465917748d19/functions/getfile.go">View Code</a>
+                </Col>
+            </Row>
+        </Container>
     </div>
 }
 
