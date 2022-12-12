@@ -1,6 +1,8 @@
 import React from 'react'
 import { useRef, useEffect, useCallback, useState } from 'react'
 import { CircularProgress } from '@mui/material'
+import Header from './Header'
+
 const FileUploadTest = () => {
     const fileElementRef = useRef()
     //State variable to hold our currently uploaded file as base 64 string
@@ -136,6 +138,7 @@ const FileUploadTest = () => {
         Generate the view
     */
     return <div>
+        <Header/>
         <h3>Upload a File to TauByte</h3>
         {!uploading && <div>
             <h3>Please select an image file: (.png, .jpeg, .jpg only) </h3>

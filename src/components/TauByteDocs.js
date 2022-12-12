@@ -13,44 +13,12 @@ import { useState } from 'react';
 import BlindIcon from '@mui/icons-material/Blind';
 import { useNavigate } from 'react-router-dom'
 import { CodeBlock, dracula} from "react-code-blocks";
-
+import Header from './Header'
 const TauByteDocs = () => {
-    const [drawerOpen,setDrawerOpen] = useState(false)
-    const nav = useNavigate()
-
-    const playEasySound = (e) => {
-        const easySound = new Audio('that_was_easy.mp3')
-        easySound.play()
-    }
-
     return <div>
-        <Box sx={{ flexGrow: 1 }}>
-            <Drawer open={drawerOpen} onClose={e=>setDrawerOpen(false)}>
-            <Button onClick={e=>nav('/')}><BlindIcon/>Home</Button>
-            </Drawer>
-            <AppBar position="fixed">
-            <Toolbar>
-                <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-                onClick={e=>setDrawerOpen(!drawerOpen)}
-                >
-                <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    TauByte Experiments
-                </Typography>
-                <Button color="inherit" onClick={playEasySound}>
-                    <img height="50px" alt="easy button" src="easy_button.png"/>
-                </Button>
-            </Toolbar>
-            </AppBar>
-        </Box>
+        <Header/>
         <Container>
-            <Row className="mt-5">
+            <Row>
                 <Col className="d-flex justify-content-center mt-5"><h1>TauByte Experiments</h1></Col>
             </Row>
             <Row>
